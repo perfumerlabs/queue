@@ -1,0 +1,40 @@
+{
+    "name": "perfumerlabs/queue",
+    "type": "library",
+    "description": "Queue docker container",
+    "homepage": "https://perfumerlabs.com",
+    "authors": [
+        {
+            "name": "Ilyas Makashev",
+            "email": "mehmatovec@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "perfumer/framework": "0.5.3",
+        "pwfisher/command-line-php": "dev-master",
+        "symfony/console": "4.1.6",
+        "symfony/http-foundation": "4.1.6",
+        "nikic/fast-route": "1.2.0",
+        "tarantool/queue": "v0.7.0",
+        "tarantool/client": "v0.4.1",
+        "rybakit/msgpack": "v0.5.4",
+        "guzzlehttp/guzzle": "6.3.0"
+    },
+    "require-dev": {
+        "filp/whoops": "2.3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Queue\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist"
+    }
+}
