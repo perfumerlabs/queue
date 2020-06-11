@@ -1,0 +1,102 @@
+libphp-pgq (0.15-2) unstable; urgency=low
+
+  * Fix Cooperative Consumer status
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Wed, 18 Apr 2012 11:42:41 +0200
+
+libphp-pgq (0.14-1) unstable; urgency=low
+
+  * Add support for PGQ Cooperative Consumers (PGQ 3)
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Wed, 08 Feb 2012 15:35:40 +0100
+
+libphp-pgq (0.13-1) unstable; urgency=low
+
+  * Fix simple logger streams detection
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Thu, 22 Dec 2011 12:17:26 +0100
+
+libphp-pgq (0.12-1) unstable; urgency=low
+
+  * Better DEBUG facilities for unhandled errors
+  * Add handling of errors in newer versions of PHP
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Thu, 01 Dec 2011 14:43:51 +0100
+
+libphp-pgq (0.11-1) unstable; urgency=low
+
+  * E_STRICT is not a FATAL error by any means (try being backward compatible)
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Mon, 31 Oct 2011 10:42:13 +0100
+
+libphp-pgq (0.10-1) unstable; urgency=low
+
+  * split() is deprecated, use explode()
+  * fix a WARNING about already closed STDOUT
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Tue, 04 Oct 2011 10:47:42 +0200
+
+libphp-pgq (0.9~dev1-2) unstable; urgency=low
+
+  * Fix the urlencoded decode function to avoid using empty()
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Mon, 08 Feb 2010 10:14:09 +0100
+
+libphp-pgq (0.8-1) unstable; urgency=low
+
+  * Avoid defining constants if they are already set, by our users e.g.
+  * Fix exception handling in function exceptFault()
+  * As tempnam() creates the file, append .log by means of rename
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Tue, 01 Dec 2009 16:39:27 +0100
+
+libphp-pgq (0.7-1) unstable; urgency=low
+
+  * add a kill_hook($pid) in SystemDaemon
+  * Fix the fatal error hint message to create the pgq_last_batch table
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Thu, 19 Nov 2009 17:51:41 +0100
+
+libphp-pgq (0.6-1) unstable; urgency=low
+
+  * Protect install / uninstall in a transaction
+  * Debug PGQ::get_consumers() to only use $result when not False
+  * Debug PGQ::{un}register to preperly define result variables...
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Tue, 15 Sep 2009 10:33:58 +0200
+
+libphp-pgq (0.5-1) unstable; urgency=low
+
+  * Add pgq.maint_retry_events() in the PGQ and PGQConsumer APIs
+  * change the default PGQEvent retry_delay to 5 hours instead of null
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Thu, 25 Jun 2009 10:36:50 +0200
+
+libphp-pgq (0.4-1) unstable; urgency=low
+
+  * Fix failed_event_list() to fill an associative array of event->id
+  * Fix print Array() from failed_event_{delete,retry}
+  * Connect() errors are now transient, no more fatal
+  * rename deconnect() to disconnect()
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Wed, 12 Nov 2008 12:50:30 +0100
+
+libphp-pgq (0.3-1) unstable; urgency=low
+
+  * Do not unregister consumer when there's a data loss risk identified
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Thu, 11 Sep 2008 16:09:37 +0200
+
+libphp-pgq (0.2-1) unstable; urgency=low
+
+  * FIX require path to include "pgq/", as implied by the packaging
+  * FIX some typos and add PGQ.php
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Wed, 25 Jun 2008 09:25:36 +0200
+
+libphp-pgq (0.1-1) unstable; urgency=low
+
+  * Initial debian packaging
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Tue, 24 Jun 2008 11:15:49 +0200
+

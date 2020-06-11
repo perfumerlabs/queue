@@ -56,6 +56,12 @@ RUN set -x\
 
 ENV QUEUE_HOST queue
 ENV QUEUE_WORKERS "{\"default\":1}"
+ENV QUEUE_ADAPTER=${app_adapter:-'tarantool'}
+ENV PG_HOST=${app_pg_host:-'postgresql'}
+ENV PG_PORT=${app_pg_port:-5432}
+ENV PG_USER=${app_pg_user:-'postgres'}
+ENV PG_PASSWORD=${app_pg_password:-''}
+ENV PG_DATABASE=${app_database:-'pgq'}
 
 VOLUME /var/lib/tarantool
 
