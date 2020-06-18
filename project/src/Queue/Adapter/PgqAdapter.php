@@ -130,19 +130,19 @@ class PgqAdapter implements QueueInterface
     public function delete(Task $task)
     {
         $batch = $this->queue->next_batch();
-        if($batch === null) {
+        if ($batch === null) {
             return;
-        }//if batch is null
+        } // if batch is null
         $events = $this->queue->get_batch_events($batch->getId());
-        if(empty($events)) {
+        if (empty($events)) {
             return;
-        }//if empty events
-        foreach($events as $event) {
-            if($event->getId() == $task->getId()) {
+        } // if empty events
+        foreach ($events as $event) {
+            if ($event->getId() == $task->getId()) {
                 $this->queue->event_failed($batch->getId(), $event);
-        $this->queue->failed_event_delete($event->getId());
-        break;
-            }//if found
-        }//foreach event
+                $this->queue->failed_event_delete($event->getId());
+                break;
+            } // if found
+        } // foreach event
     }
 }

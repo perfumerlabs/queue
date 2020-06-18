@@ -2,6 +2,7 @@
 namespace Queue\Queue\Pgq;
 
 use pgq\PGQConsumer;
+
 define("CONFIGURATION", __DIR__ . "/src/Resource/config/pgq.conf");
 
 class Queue extends PGQConsumer
