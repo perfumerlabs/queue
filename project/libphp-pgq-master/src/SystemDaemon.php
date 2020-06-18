@@ -85,7 +85,7 @@ abstract class SystemDaemon
 
 		$this->log = new SimpleLogger(WARNING, STDOUT);
 		$this->main($argc, $argv);
-	}
+		}
 
 	/**
 	 * Implement those functions when inheriting from this class.
@@ -121,8 +121,8 @@ abstract class SystemDaemon
 				$pid = $this->getpid();
 				if ($pid !== false) {
 					printf("Trying to start already running daemon '%s' [%s] \n",
-						$this->name, $pid);
-					exit(4);
+					    						$this->name, $pid);
+										exit(4);
 				} else
 					$this->start();
 				break;
@@ -191,12 +191,14 @@ abstract class SystemDaemon
 			fprintf(STDERR, "fork failure: %s",
 				posix_strerror(posix_get_last_error()));
 			exit;
+			/*
 		} else if ($pid) {
-			/**
+			/-**
 			 * Father exit, and let is daemon child work.
-			 */
+			 *-/
 			exit;
 		} else {
+		*/
 			/**
 			 * The child works.
 			 */

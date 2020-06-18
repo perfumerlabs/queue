@@ -17,7 +17,7 @@ abstract class Worker extends PlainController
 
         while (true) {
             $task = null;
-
+echo "hello world from worker.";
             if ($task = $queue->get()) {
                 $queue->complete($task);
 

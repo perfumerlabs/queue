@@ -16,16 +16,16 @@
         "symfony/console": "4.1.6",
         "symfony/http-foundation": "4.1.6",
         "nikic/fast-route": "1.2.0",
+        "rybakit/msgpack": "v0.5.4",
         "tarantool/queue": "v0.7.0",
         "tarantool/client": "v0.4.1",
-        "rybakit/msgpack": "v0.5.4",
         "guzzlehttp/guzzle": "6.3.0",
         "ext-pcntl": "*",
         "ext-pgsql": "*"
-    },
+        },
     "require-dev": {
         "filp/whoops": "2.3.1"
-    },
+        },
     "autoload": {
         "psr-4": {
             "Queue\\": "src/",
@@ -34,7 +34,7 @@
         "files": ["libphp-pgq-master/src/constants.php"]
     },
     "autoload-dev": {
-        "psr-4": {
+    "psr-4": {
             "Tests\\": "tests/"
         }
     },

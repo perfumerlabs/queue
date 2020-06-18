@@ -18,8 +18,8 @@ class PgqAdapter implements QueueInterface
     public function __construct(Queue $queue)
     {
         $this->queue = $queue;
-        $this->log = null;
-        $this->connectionString = 'host=' . envget('PG_HOST') . ' port=' . envget('PG_PORT') . ' dbname=' . envget('PG_DATABASE') . ' user=' . envget('PG_USER') . ' password=' . envget('PG_PASSWORD');
+        $this->log = new \pgq\SimpleLogger(VERBOSE, "/opt/queue/logs/pgq.log");
+        $this->connectionString = 'host=' . getenv('PG_HOST') . ' port=' . getenv('PG_PORT') . ' dbname=' . getenv('PG_DATABASE') . ' user=' . getenv('PG_USER') . ' password=' . getenv('PG_PASSWORD');
     }
 
     public function save(Task $task)
@@ -29,7 +29,7 @@ class PgqAdapter implements QueueInterface
             "ev_time" => $task->getDatetime(),
             "ev_txid" => $task->getId(),
             "ev_type" => $task->getMethod(),
-            "ev_data" => $task->getQueryString(),
+            "ev_data" => http_build_query($task->getQueryString()),
             "ev_extra2" => '', // old_data
             "ev_extra1" => 'pgq', // table,
             "ev_retry" => $task->getDelay() ? $task->getDelay() : 18000
@@ -41,10 +41,10 @@ class PgqAdapter implements QueueInterface
             $this->failed_time = $row["ev_failed_time"];
         }
 
-        $event = newPgqEvent($this->log, $row);
+        $event = new PgqEvent($this->log, $row);
         $connection = pg_connect($this->connectionString);
         pg_query_params($connection, "select * from pgq.insert_event($1, $2, $3)", [
-            $this->getQname(),
+            $this->queue->getQname(),
             $event->type,
             $event->__toString()
         ]);
@@ -117,9 +117,9 @@ class PgqAdapter implements QueueInterface
 
                 $task = new Task();
                 $task->setHeaders((array) $headers);
-$task->setQueryString(($event->data);
+                $task->setQueryString($event->data);
                 $task->setDatetime($event->time);
-$task->setId($event->getId()]);
+                $task->setId($event->getId());
                 $task->setMethod($event->tipe);
             } // if event
         } // if batch
@@ -129,13 +129,20 @@ $task->setId($event->getId()]);
 
     public function delete(Task $task)
     {
-        if ($task->getId() === null) {
+        $batch = $this->queue->next_batch();
+        if($batch === null) {
             return;
-        }
-
-        $connection = pg_connect($this->connectionString);
-        pg_query_params($connection, "select * from pgq.delete_event($1)", [
-            $task->getId()
-        ]);
+        }//if batch is null
+        $events = $this->queue->get_batch_events($batch->getId());
+        if(empty($events)) {
+            return;
+        }//if empty events
+        foreach($events as $event) {
+            if($event->getId() == $task->getId()) {
+                $this->queue->event_failed($batch->getId(), $event);
+        $this->queue->failed_event_delete($event->getId());
+        break;
+            }//if found
+        }//foreach event
     }
 }

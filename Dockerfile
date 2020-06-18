@@ -13,6 +13,7 @@ RUN set -x \
     && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C \
     && apt update \
     && apt install -y \
+        dos2unix \
         nginx \
         php7.1 \
         php7.1-cli \
@@ -41,26 +42,38 @@ RUN set -x \
         tarantool-queue
 
 COPY project /opt/queue
+RUN dos2unix /opt/queue
 COPY nginx /usr/share/container_config/nginx
+RUN dos2unix /usr/share/container_config/nginx
 COPY supervisor /usr/share/container_config/supervisor
+RUN dos2unix /usr/share/container_config/supervisor
 COPY queue.lua /etc/tarantool/instances.enabled/queue.lua
+RUN dos2unix /etc/tarantool/instances.enabled/queue.lua
 COPY init.sh /usr/local/bin/init.sh
+RUN dos2unix /usr/local/bin/init.sh
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN dos2unix /usr/local/bin/entrypoint.sh
 
 RUN set -x\
     && chown -R queue:queue /opt/queue \
     && cd /opt/queue \
     && sudo -u queue php composer.phar install --no-dev --prefer-dist \
     && chmod +x /usr/local/bin/entrypoint.sh \
-    && chmod +x /usr/local/bin/init.sh
+    && chmod +x /usr/local/bin/init.sh \
+    && apt-get install composer -y \
+    && apt-get install php7.1-pgsql -y \
+    && apt-get install php7.1-dom -y \
+    && apt-get install php7.1-mbstring -y \
+    && composer require 'phpunit/phpunit'
 
 ENV QUEUE_HOST queue
 ENV QUEUE_WORKERS "{\"default\":1}"
 ENV QUEUE_ADAPTER=${app_adapter:-'tarantool'}
-ENV PG_HOST=${app_pg_host:-'postgresql'}
+#ENV PG_HOST=${app_pg_host:-'postgresql'}
+ENV PG_HOST=${app_pg_host:-'db'}
 ENV PG_PORT=${app_pg_port:-5432}
 ENV PG_USER=${app_pg_user:-'postgres'}
-ENV PG_PASSWORD=${app_pg_password:-''}
+ENV PG_PASSWORD=${app_pg_password:-'postgres'}
 ENV PG_DATABASE=${app_database:-'pgq'}
 
 VOLUME /var/lib/tarantool

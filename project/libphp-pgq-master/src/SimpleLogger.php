@@ -1,179 +1,193 @@
 <?php
-
 namespace pgq;
 
 class SimpleLogger
 {
-	private $logfile_fd = False;
-	public $loglevel = WARNING;
-	public $logfile;
 
-	public function __construct($loglevel, $logfile)
-	{
-		$this->loglevel = $loglevel;
+    private $logfile_fd = False;
 
-		if (empty($logfile)) {
-			$this->logfile = tempnam("/tmp", "pgq\SimpleLogger-");
-			if ($this->logfile !== False)
-				rename($this->logfile, sprintf("%s.log", $this->logfile));
-		} else
-			$this->logfile = $logfile;
+    public $loglevel = WARNING;
 
-		date_default_timezone_set(DEFAULT_TZ);
-		$this->open();
-	}
+    public $logfile;
 
-	function __destruct()
-	{
-		/* Only close the logfile when we opened it ourselves */
-		if (!is_resource($this->logfile)) {
-			$this->notice("Closing log file " . $this->logfile);
-			fclose($this->logfile_fd);
-		}
-	}
+    public function __construct($loglevel, $logfile)
+    {
+        $this->loglevel = $loglevel;
 
-	/**
-	 * Opens the given filename, or use the given stream resource (STDOUT)
-	 */
-	private function open()
-	{
-		if (is_resource($this->logfile)) {
-			$this->logfile_fd = $this->logfile;
-		} else {
-			$this->logfile_fd = fopen($this->logfile, "a+");
-		}
+        if (empty($logfile)) {
+            $this->logfile = tempnam("/tmp", "pgq\SimpleLogger-");
+            if ($this->logfile !== False)
+                rename($this->logfile, sprintf("%s.log", $this->logfile));
+        } else
+            $this->logfile = $logfile;
 
-		if ($this->logfile_fd === false) {
-			fprintf(STDERR, "FATAL: couldn't open '%s' \n", $this->logfile);
-		} else
-			$this->notice("Logging to file '%s'", $this->logfile);
-	}
+        date_default_timezone_set(DEFAULT_TZ);
+        $this->open();
+    }
 
-	/**
-	 * At reload time, don't forget to reopen $this->logfile
-	 * This allows for log rotating.
-	 */
-	public function reopen()
-	{
-		$this->warning("Closing log file " . $this->logfile);
-		fclose($this->logfile_fd);
-		$this->logfile_fd = False;
-		$this->open();
-	}
+    function __destruct()
+    {
+        /* Only close the logfile when we opened it ourselves */
+        if (! is_resource($this->logfile)) {
+            $this->notice("Closing log file " . $this->logfile);
+            fclose($this->logfile_fd);
+        }
+    }
 
-	/**
-	 * Check that the logfile has been opened with success.
-	 * @return bool
-	 */
-	public function check()
-	{
-		return $this->logfile_fd !== false;
-	}
+    /**
+     * Opens the given filename, or use the given stream resource (STDOUT)
+     */
+    private function open()
+    {
+        if (is_resource($this->logfile)) {
+            $this->logfile_fd = $this->logfile;
+        } else {
+            $this->logfile_fd = fopen($this->logfile, "a+");
+        }
 
-	function debug()
-	{
-		$args = func_get_args();
-		$this->_log(DEBUG, $args);
-	}
+        if ($this->logfile_fd === false) {
+            fprintf(STDERR, "FATAL: couldn't open '%s' \n", $this->logfile);
+            } else
+            $this->notice("Logging to file '%s'", $this->logfile);
+    }
 
-	function verbose()
-	{
-		$args = func_get_args();
-		$this->_log(VERBOSE, $args);
-	}
+    /**
+     * At reload time, don't forget to reopen $this->logfile
+     * This allows for log rotating.
+     */
+    public function reopen()
+    {
+        $this->warning("Closing log file " . $this->logfile);
+        fclose($this->logfile_fd);
+        $this->logfile_fd = False;
+        $this->open();
+    }
 
-	function notice()
-	{
-		$args = func_get_args();
-		$this->_log(NOTICE, $args);
-	}
+    /**
+     * Check that the logfile has been opened with success.
+     *
+     * @return bool
+     */
+    public function check()
+    {
+        return $this->logfile_fd !== false;
+    }
 
-	function warning()
-	{
-		$args = func_get_args();
-		$this->_log(WARNING, $args);
-	}
+    function debug()
+    {
+        $args = func_get_args();
+        $this->_log(DEBUG, $args);
+    }
 
-	function error()
-	{
-		$args = func_get_args();
-		$this->_log(ERROR, $args);
-	}
+    function verbose()
+    {
+        $args = func_get_args();
+        $this->_log(VERBOSE, $args);
+    }
 
-	function fatal()
-	{
-		$args = func_get_args();
-		$this->_log(FATAL, $args);
-	}
+    function notice()
+    {
+        $args = func_get_args();
+        $this->_log(NOTICE, $args);
+    }
 
-	function _log($level, $args)
-	{
-		if ($level >= $this->loglevel) {
-			$format = array_shift($args);
-			$date = date("Y-m-d H:i:s");
-			$vargs = array_merge(array($date, $this->strlevel($level)), $args);
-			$mesg = vsprintf("%s\t%s\t" . $format . "\n", $vargs);
+    function warning()
+    {
+        $args = func_get_args();
+        $this->_log(WARNING, $args);
+    }
 
-			fwrite($this->logfile_fd, $mesg);
-		}
-	}
+    function error()
+    {
+        $args = func_get_args();
+        $this->_log(ERROR, $args);
+    }
 
-	function strlevel($level)
-	{
-		switch ($level) {
-			case DEBUG:
-				return "DEBUG";
-				break;
+    function fatal()
+    {
+        $args = func_get_args();
+        $this->_log(FATAL, $args);
+    }
 
-			case VERBOSE:
-				return "VERBOSE";
-				break;
+    function _log($level, $args)
+    {
+        if ($level >= $this->loglevel) {
+            $format = array_shift($args);
+            $date = date("Y-m-d H:i:s");
+            $vargs = array_merge(array(
+                $date,
+                $this->strlevel($level)
+            ), $args);
+            $mesg = vsprintf("%s\t%s\t" . $format . "\n", $vargs);
 
-			case NOTICE:
-				return "NOTICE";
-				break;
+            fwrite($this->logfile_fd, $mesg);
+        }
+    }
 
-			case WARNING:
-				return "WARNING";
-				break;
+    function strlevel($level)
+    {
+        switch ($level) {
+            case DEBUG:
+                return "DEBUG";
+                break;
 
-			case ERROR:
-				return "ERROR";
-				break;
+            case VERBOSE:
+                return "VERBOSE";
+                break;
 
-			case FATAL:
-				return "FATAL";
-				break;
+            case NOTICE:
+                return "NOTICE";
+                break;
 
-			default:
-				return $level;
-		}
-	}
+            case WARNING:
+                return "WARNING";
+                break;
 
-	/**
-	 * On the fly log level control utility functions
-	 */
-	public function logless()
-	{
-		$this->_log($this->loglevel, array("Incrementing loglevel"));
+            case ERROR:
+                return "ERROR";
+                break;
 
-		if ($this->loglevel < FATAL)
-			$this->loglevel += 10;
+            case FATAL:
+                return "FATAL";
+                break;
 
-		$this->_log($this->loglevel,
-			array("loglevel is now %s", $this->strlevel($this->loglevel)));
-	}
+            default:
+                return $level;
+        }
+    }
 
-	public function logmore()
-	{
-		$this->_log($this->loglevel, array("Decrementing loglevel"));
+    /**
+     * On the fly log level control utility functions
+     */
+    public function logless()
+    {
+        $this->_log($this->loglevel, array(
+            "Incrementing loglevel"
+        ));
 
-		if ($this->loglevel > DEBUG)
-			$this->loglevel -= 10;
+        if ($this->loglevel < FATAL)
+            $this->loglevel += 10;
 
-		$this->_log($this->loglevel,
-			array("loglevel is now %s", $this->strlevel($this->loglevel)));
-	}
+        $this->_log($this->loglevel, array(
+            "loglevel is now %s",
+            $this->strlevel($this->loglevel)
+        ));
+    }
+
+    public function logmore()
+    {
+        $this->_log($this->loglevel, array(
+            "Decrementing loglevel"
+        ));
+
+        if ($this->loglevel > DEBUG)
+            $this->loglevel -= 10;
+
+        $this->_log($this->loglevel, array(
+            "loglevel is now %s",
+            $this->strlevel($this->loglevel)
+        ));
+    }
 }
 
 ?>

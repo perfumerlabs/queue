@@ -388,8 +388,8 @@ abstract class PGQ
 											   $qname, $cname, $event_id)
 	{
 		$sql = sprintf("SELECT pgq.failed_event_delete('%s', '%s', %d)",
-			pg_escape_string($qname),
-			pg_escape_string($cname),
+			 pg_escape_string($qname),
+			 pg_escape_string($cname),
 			$event_id);
 
 		$log->debug("%s", $sql);

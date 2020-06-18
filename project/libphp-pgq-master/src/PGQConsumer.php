@@ -676,28 +676,28 @@ abstract class PGQConsumer extends SystemDaemon
 	}
 
 
-	protected function create_queue()
+	public function create_queue()
 	{
 		return PGQ::create_queue($this->log, $this->pg_src_con, $this->qname);
 	}
 
-	protected function drop_queue()
+	public function drop_queue()
 	{
 		return PGQ::drop_queue($this->log, $this->pg_src_con, $this->qname);
 	}
 
-	protected function queue_exists()
+	public function queue_exists()
 	{
 		return PGQ::queue_exists($this->log, $this->pg_src_con, $this->qname);
 	}
 
-	protected function register()
+	public function register()
 	{
 		return PGQ::register($this->log, $this->pg_src_con,
 			$this->qname, $this->cname);
 	}
 
-	protected function unregister()
+	public function unregister()
 	{
 		return PGQ::unregister($this->log, $this->pg_src_con,
 			$this->qname, $this->cname);
@@ -736,12 +736,12 @@ abstract class PGQConsumer extends SystemDaemon
 		return PGQ::get_batch_events($this->log, $this->pg_src_con, $batch_id);
 	}
 
-	protected function event_failed($batch_id, $event)
+	public function event_failed($batch_id, $event)
 	{
 		return PGQ::event_failed($this->log, $this->pg_src_con, $batch_id, $event);
 	}
 
-	protected function event_retry($batch_id, $event)
+	public function event_retry($batch_id, $event)
 	{
 		return PGQ::event_retry($this->log, $this->pg_src_con, $batch_id, $event);
 	}
@@ -763,7 +763,7 @@ abstract class PGQConsumer extends SystemDaemon
 			$this->qname, $this->cname);
 	}
 
-	protected function failed_event_delete($event_id)
+	public function failed_event_delete($event_id)
 	{
 		return PGQ::failed_event_delete($this->log, $this->pg_src_con,
 			$this->qname, $this->cname, $event_id);
