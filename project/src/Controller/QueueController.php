@@ -48,13 +48,13 @@ class QueueController extends PlainController
                 $options['body'] = $body;
             }
 
-            echo "Request to $method $url";
+            echo "Request to $method $url" . PHP_EOL;
 
             $client->request($method, $url, $options);
 
-            echo 'Request finished successfully';
+            echo 'Request finished successfully' . PHP_EOL;
         } catch (\Throwable $e) {
-            echo 'Request failed: ' . $e->getMessage();
+            echo 'Request failed: ' . $e->getMessage() . PHP_EOL;
         }
     }
 }
