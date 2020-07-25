@@ -18,7 +18,7 @@ class QueueController extends PlainController
                 'connect_timeout' => 15,
                 'read_timeout'    => 15,
                 'timeout'         => 15,
-                'debug' => true,
+//                'debug' => true,
                 'headers' => $headers
             ];
 
@@ -48,8 +48,13 @@ class QueueController extends PlainController
                 $options['body'] = $body;
             }
 
+            echo "Request to $method $url";
+
             $client->request($method, $url, $options);
+
+            echo 'Request finished successfully';
         } catch (\Throwable $e) {
+            echo 'Request failed: ' . $e->getMessage();
         }
     }
 }

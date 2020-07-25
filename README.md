@@ -9,7 +9,7 @@ docker run \
 -e QUEUE_HOST=example.com \
 -e "QUEUE_WORKERS={\"my_worker\":1}" \
 -v tarantool:/var/lib/tarantool \
--d perfumerlabs/queue:v1.0.0
+-d perfumerlabs/queue:v1.1.0
 ```
 
 Environment variables
@@ -29,8 +29,8 @@ Software
 ========
 
 1. Ubuntu 16.04 Xenial
-2. Tarantool 1.7
-3. PHP 7.1
+2. Tarantool 2.2
+3. PHP 7.4
 
 How it works
 ============

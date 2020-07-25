@@ -14,13 +14,13 @@ RUN set -x \
     && apt update \
     && apt install -y \
         nginx \
-        php7.1 \
-        php7.1-cli \
-        php7.1-common \
-        php7.1-curl \
-        php7.1-fpm \
-        php7.1-json \
-        php7.1-opcache \
+        php7.4 \
+        php7.4-cli \
+        php7.4-common \
+        php7.4-curl \
+        php7.4-fpm \
+        php7.4-json \
+        php7.4-opcache \
         supervisor \
         vim \
         curl \
@@ -30,11 +30,11 @@ RUN set -x \
         gnupg2 \
         lsb-release \
         apt-transport-https \
-    && curl http://download.tarantool.org/tarantool/1.7/gpgkey | sudo apt-key add - \
+    && curl http://download.tarantool.org/tarantool/2.2/gpgkey | sudo apt-key add - \
     && release=`lsb_release -c -s` \
     && sudo rm -f /etc/apt/sources.list.d/*tarantool*.list \
-    && echo "deb http://download.tarantool.org/tarantool/1.7/ubuntu/ ${release} main" | sudo tee /etc/apt/sources.list.d/tarantool_1_7.list \
-    && echo "deb-src http://download.tarantool.org/tarantool/1.7/ubuntu/ ${release} main" | sudo tee -a /etc/apt/sources.list.d/tarantool_1_7.list \
+    && echo "deb http://download.tarantool.org/tarantool/2.2/ubuntu/ ${release} main" | sudo tee /etc/apt/sources.list.d/tarantool_2_2.list \
+    && echo "deb-src http://download.tarantool.org/tarantool/2.2/ubuntu/ ${release} main" | sudo tee -a /etc/apt/sources.list.d/tarantool_2_2.list \
     && apt update \
     && apt install -y \
         tarantool \
