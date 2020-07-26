@@ -14,7 +14,7 @@
         "perfumer/framework": "0.5.3",
         "pwfisher/command-line-php": "dev-master",
         "symfony/console": "4.1.6",
-        "symfony/http-foundation": "4.1.6",
+        "symfony/http-foundation": "4.2.12",
         "nikic/fast-route": "1.2.0",
         "tarantool/queue": "v0.7.0",
         "tarantool/client": "v0.4.1",
