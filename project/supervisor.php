@@ -15,6 +15,7 @@ numprocs=$nb_processes
 directory=/opt/queue
 autostart=true
 autorestart=true
+startretries=10000
 priority=20
 stdout_events_enabled=true
 stderr_events_enabled=true

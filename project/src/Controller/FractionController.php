@@ -5,24 +5,24 @@ namespace Queue\Controller;
 use Queue\Queue\Adapter\TarantoolAdapter;
 use Queue\Queue\Task;
 
-class TaskController extends LayoutController
+class FractionController extends LayoutController
 {
     public function post()
     {
         $data = $this->f([
             'worker',
-            'delay',
-            'datetime',
             'url',
             'method',
             'headers',
             'json',
             'query_string',
             'body',
-            'sleep',
+            'min',
+            'max',
+            'gap',
         ]);
 
-        $data['type'] = Task::TYPE_REGULAR;
+        $data['type'] = Task::TYPE_FRACTION;
 
         $task = $this->createTaskFromArray($data);
 

@@ -38,6 +38,7 @@ class TarantoolAdapter implements QueueInterface
         }
 
         $data = [
+            'type' => $task->getType(),
             'url' => $task->getUrl(),
             'method' => $task->getMethod(),
             'headers' => $task->getHeaders(),
@@ -46,6 +47,12 @@ class TarantoolAdapter implements QueueInterface
             'body' => $task->getBody(),
             'sleep' => $task->getSleep(),
         ];
+
+        if ($task->getType() === Task::TYPE_FRACTION) {
+            $data['min'] = $task->getMin();
+            $data['max'] = $task->getMax();
+            $data['gap'] = $task->getGap();
+        }
 
         $this->queue->put($data, $options);
     }
@@ -68,6 +75,7 @@ class TarantoolAdapter implements QueueInterface
         if ($tarantool_task) {
             $data = $tarantool_task->getData();
 
+            $type = $data['type'] ?? Task::TYPE_REGULAR;
             $url = $data['url'] ?? null;
             $method = $data['method'] ?? null;
             $headers = $data['headers'] ?? [];
@@ -75,8 +83,12 @@ class TarantoolAdapter implements QueueInterface
             $query_string = $data['query_string'] ?? [];
             $body = $data['body'] ?? null;
             $sleep = $data['sleep'] ?? 0;
+            $min = $data['min'] ?? 0;
+            $max = $data['max'] ?? 0;
+            $gap = $data['gap'] ?? 0;
 
             $task = new Task();
+            $task->setType((string) $type);
             $task->setUrl((string) $url);
             $task->setMethod((string) $method);
             $task->setHeaders((array) $headers);
@@ -84,6 +96,9 @@ class TarantoolAdapter implements QueueInterface
             $task->setQueryString((array) $query_string);
             $task->setBody((string) $body);
             $task->setSleep((int) $sleep);
+            $task->setMin((int) $min);
+            $task->setMax((int) $max);
+            $task->setGap((int) $gap);
             $task->setId($tarantool_task->getId());
         }
 

@@ -6,8 +6,7 @@ return [
         'init' => function(\Perfumer\Component\Container\Container $container) {
             return \FastRoute\simpleDispatcher(function(\FastRoute\RouteCollector $r) {
                 $r->addRoute('POST', '/task', 'task.post');
-                $r->addRoute('GET', '/test', 'test.get');
-                $r->addRoute('POST', '/test', 'test.post');
+                $r->addRoute('POST', '/fraction', 'fraction.post');
             });
         }
     ],

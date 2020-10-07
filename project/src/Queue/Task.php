@@ -4,6 +4,14 @@ namespace Queue\Queue;
 
 class Task
 {
+    const TYPE_REGULAR = 'regular';
+    const TYPE_FRACTION = 'fraction';
+
+    /**
+     * @var string
+     */
+    private $type = self::TYPE_REGULAR;
+
     /**
      * @var mixed
      */
@@ -53,6 +61,37 @@ class Task
      * @var int
      */
     private $sleep;
+
+    /**
+     * @var int
+     */
+    private $min = 0;
+
+    /**
+     * @var int
+     */
+    private $max = 0;
+
+    /**
+     * @var int
+     */
+    private $gap = 0;
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
 
     /**
      * @return mixed
@@ -212,5 +251,53 @@ class Task
     public function setSleep($sleep)
     {
         $this->sleep = $sleep;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMin()
+    {
+        return $this->min;
+    }
+
+    /**
+     * @param int $min
+     */
+    public function setMin($min)
+    {
+        $this->min = $min;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMax()
+    {
+        return $this->max;
+    }
+
+    /**
+     * @param int $max
+     */
+    public function setMax($max)
+    {
+        $this->max = $max;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGap()
+    {
+        return $this->gap;
+    }
+
+    /**
+     * @param int $gap
+     */
+    public function setGap($gap)
+    {
+        $this->gap = $gap;
     }
 }

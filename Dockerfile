@@ -22,6 +22,7 @@ RUN set -x \
         php7.4-json \
         php7.4-opcache \
         supervisor \
+        iputils-ping \
         vim \
         curl \
         git \

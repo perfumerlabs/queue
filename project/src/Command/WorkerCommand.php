@@ -1,14 +1,9 @@
 <?php
 
-namespace Queue\Controller;
+namespace Queue\Command;
 
-use Perfumer\Framework\Router\ConsoleRouterControllerHelpers;
-use Queue\Queue\Worker;
-
-class WorkerController extends Worker
+class WorkerCommand extends WorkerLayoutCommand
 {
-    use ConsoleRouterControllerHelpers;
-
     protected $adapter;
 
     protected function getName()

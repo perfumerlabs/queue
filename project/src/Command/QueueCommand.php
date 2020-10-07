@@ -1,11 +1,11 @@
 <?php
 
-namespace Queue\Controller;
+namespace Queue\Command;
 
 use GuzzleHttp\Client;
 use Perfumer\Framework\Controller\PlainController;
 
-class QueueController extends PlainController
+class QueueCommand extends PlainController
 {
     public function task($url, $method, $headers = [], $json = [], $query_string = [], $body = null)
     {
