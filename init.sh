@@ -9,14 +9,9 @@ set -x \
 && rm -rf /etc/supervisor \
 && mkdir /run/php
 
-QUEUE_HOST_SED=${QUEUE_HOST//\//\\\/}
-QUEUE_HOST_SED=${QUEUE_HOST_SED//\./\\\.}
-
 set -x \
 && cp -r "/usr/share/container_config/nginx" /etc/nginx \
 && cp -r "/usr/share/container_config/supervisor" /etc/supervisor
-
-sed -i "s/server_name queue;/server_name $QUEUE_HOST_SED;/g" /etc/nginx/sites/queue.conf
 
 sed -i "s/error_log = \/var\/log\/php7.4-fpm.log/error_log = \/dev\/stdout/g" /etc/php/7.4/fpm/php-fpm.conf
 sed -i "s/;error_log = syslog/error_log = \/dev\/stdout/g" /etc/php/7.4/fpm/php.ini
@@ -32,7 +27,5 @@ sed -i "s/;pm.max_requests = 500/pm.max_requests = 500/g" /etc/php/7.4/fpm/pool.
 sed -i "s/listen.owner = www-data/listen.owner = queue/g" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/listen.group = www-data/listen.group = queue/g" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/;catch_workers_output = yes/catch_workers_output = yes/g" /etc/php/7.4/fpm/pool.d/www.conf
-
-sed -i "s/QUEUE_HOST/$QUEUE_HOST_SED/g" /opt/queue/src/Gateway.php
 
 touch /node_status_inited

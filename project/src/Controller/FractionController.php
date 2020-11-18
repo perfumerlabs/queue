@@ -11,12 +11,15 @@ class FractionController extends LayoutController
     {
         $data = $this->f([
             'worker',
+            'delay',
+            'datetime',
             'url',
             'method',
             'headers',
             'json',
             'query_string',
             'body',
+            'sleep',
             'min',
             'max',
             'gap',

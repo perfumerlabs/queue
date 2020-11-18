@@ -38,6 +38,8 @@ abstract class WorkerLayoutCommand extends PlainController
 
                         for ($i = 0; $i < 4; $i++) {
                             $new_task = clone $task;
+                            $new_task->setDelay(null);
+                            $new_task->setDatetime(null);
                             $new_task->setMin($task->getMin() + $offset * $i);
 
                             if ($i === 3) {
@@ -64,12 +66,36 @@ abstract class WorkerLayoutCommand extends PlainController
                             $json['_min'] = $task->getMin();
                             $json['_max'] = $task->getMax();
                             $json['_gap'] = $task->getGap();
+
+                            $task->setJson($json);
                         } else {
                             $query_string['_min'] = $task->getMin();
                             $query_string['_max'] = $task->getMax();
                             $query_string['_gap'] = $task->getGap();
+
+                            $task->setQueryString($query_string);
                         }
                     }
+
+                    echo sprintf("EXECUTE: %s %s", $task->getMethod(), $task->getUrl()) . PHP_EOL;
+
+                    if ($task->getHeaders()) {
+                        echo sprintf("EXECUTE: %s", print_r($task->getHeaders(), true)) . PHP_EOL;
+                    }
+
+                    if ($task->getJson()) {
+                        echo sprintf("EXECUTE: %s", print_r($task->getJson(), true)) . PHP_EOL;
+                    }
+
+                    if ($task->getQueryString()) {
+                        echo sprintf("EXECUTE: %s", print_r($task->getQueryString(), true)) . PHP_EOL;
+                    }
+
+                    if ($task->getBody()) {
+                        echo sprintf("EXECUTE: %s", $task->getBody()) . PHP_EOL;
+                    }
+
+                    echo PHP_EOL;
 
                     $this->execute('queue', 'task', [
                         $task->getUrl(),

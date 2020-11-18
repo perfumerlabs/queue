@@ -6,16 +6,14 @@ Installation
 ```bash
 docker run \
 -p 80:80/tcp \
--e QUEUE_HOST=example.com \
 -e "QUEUE_WORKERS={\"my_worker\":1}" \
 -v tarantool:/var/lib/tarantool \
--d perfumerlabs/queue:v1.2.0
+-d perfumerlabs/queue:v1.3.0
 ```
 
 Environment variables
 =====================
 
-- QUEUE_HOST - server domain (without http://). Required.
 - QUEUE_WORKERS - list of workers in json format (see below). Required.
 
 Volumes
@@ -24,13 +22,6 @@ Volumes
 - /var/lib/tarantool - Tarantool data directory.
 
 If you want to make any additional configuration of container, mount your bash script to /opt/setup.sh. This script will be executed on container setup.
-
-Software
-========
-
-1. Ubuntu 16.04 Xenial
-2. Tarantool 2.2
-3. PHP 7.4
 
 How it works
 ============
@@ -218,7 +209,7 @@ Response example:
 
 `POST /fraction`
 
-- Same parameters as in regular task creation except "delay", "datetime" and "sleep".
+- Same parameters as in regular task creation.
 - min [integer]: lower bound of gap
 - max [integer]: upper bound of gap
 - gap [integer]: size of gap. Minimum allowed value is 10.
@@ -250,3 +241,10 @@ Response example:
     "status": true
 }
 ```
+
+Software
+========
+
+1. Ubuntu 16.04 Xenial
+2. Tarantool 2.2
+3. PHP 7.4

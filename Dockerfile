@@ -1,6 +1,6 @@
 FROM ubuntu:xenial
 
-MAINTAINER Ilyas Makashev <mehmatovec@gmail.com>
+LABEL authors="Ilyas Makashev mehmatovec@gmail.com"
 
 RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget locales && rm -rf /var/lib/apt/lists/* \
@@ -55,7 +55,6 @@ RUN set -x\
     && chmod +x /usr/local/bin/entrypoint.sh \
     && chmod +x /usr/local/bin/init.sh
 
-ENV QUEUE_HOST queue
 ENV QUEUE_WORKERS "{\"default\":1}"
 
 VOLUME /var/lib/tarantool
