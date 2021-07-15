@@ -20,12 +20,29 @@ class FractionController extends LayoutController
             'query_string',
             'body',
             'sleep',
+            'timeout',
             'min',
             'max',
             'gap',
         ]);
 
         $data['type'] = Task::TYPE_FRACTION;
+
+        $min = (int) $data['min'];
+        $max = (int) $data['max'];
+        $gap = (int) $data['gap'];
+
+        if (!$min || !$max || !$gap) {
+            $this->forward('error', 'badRequest', ["\"Min\", \"max\", \"gap\" parameters must be set"]);
+        }
+
+        if ($min > $max) {
+            $this->forward('error', 'badRequest', ["\"Min\" must not be greater than \"max\""]);
+        }
+
+        if ($gap < 10) {
+            $this->forward('error', 'badRequest', ["\"Gap\" must be greater than 10"]);
+        }
 
         $task = $this->createTaskFromArray($data);
 

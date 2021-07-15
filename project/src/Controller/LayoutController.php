@@ -23,6 +23,7 @@ class LayoutController extends ViewController
         $query_string = $data['query_string'] ?? null;
         $body = $data['body'] ?? null;
         $sleep = $data['sleep'] ?? null;
+        $timeout = $data['timeout'] ?? null;
         $min = $data['min'] ?? null;
         $max = $data['max'] ?? null;
         $gap = $data['gap'] ?? null;
@@ -68,6 +69,10 @@ class LayoutController extends ViewController
 
         if ($sleep) {
             $task->setSleep((int) $sleep);
+        }
+
+        if ($timeout) {
+            $task->setTimeout((int) $timeout);
         }
 
         if ($min) {

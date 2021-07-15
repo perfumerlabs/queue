@@ -1,14 +1,24 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
-LABEL authors="Ilyas Makashev mehmatovec@gmail.com"
+LABEL authors="Ilyas Makashev <mehmatovec@gmail.com>"
+
+ENV TZ 'UTC'
 
 RUN set -x \
-    && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget locales && rm -rf /var/lib/apt/lists/* \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        wget \
+        locales \
+        gnupg2 \
+    && rm -rf /var/lib/apt/lists/* \
     && useradd -s /bin/bash -m queue \
-    && echo "deb http://nginx.org/packages/ubuntu/ xenial nginx" > /etc/apt/sources.list.d/nginx.list \
-    && echo "deb-src http://nginx.org/packages/ubuntu/ xenial nginx" >> /etc/apt/sources.list.d/nginx.list \
-    && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" > /etc/apt/sources.list.d/php.list \
-    && echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" >> /etc/apt/sources.list.d/php.list \
+    && echo "deb http://nginx.org/packages/ubuntu/ bionic nginx" > /etc/apt/sources.list.d/nginx.list \
+    && echo "deb-src http://nginx.org/packages/ubuntu/ bionic nginx" >> /etc/apt/sources.list.d/nginx.list \
+    && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main" > /etc/apt/sources.list.d/php.list \
+    && echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu bionic main" >> /etc/apt/sources.list.d/php.list \
     && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ABF5BD827BD9BF62 \
     && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C \
     && apt update \
@@ -28,14 +38,9 @@ RUN set -x \
         git \
         zip \
         sudo \
-        gnupg2 \
         lsb-release \
         apt-transport-https \
-    && curl http://download.tarantool.org/tarantool/2.2/gpgkey | sudo apt-key add - \
-    && release=`lsb_release -c -s` \
-    && sudo rm -f /etc/apt/sources.list.d/*tarantool*.list \
-    && echo "deb http://download.tarantool.org/tarantool/2.2/ubuntu/ ${release} main" | sudo tee /etc/apt/sources.list.d/tarantool_2_2.list \
-    && echo "deb-src http://download.tarantool.org/tarantool/2.2/ubuntu/ ${release} main" | sudo tee -a /etc/apt/sources.list.d/tarantool_2_2.list \
+    && curl -L https://tarantool.io/gqJDdbI/release/2.6/installer.sh | bash \
     && apt update \
     && apt install -y \
         tarantool \
@@ -56,6 +61,10 @@ RUN set -x\
     && chmod +x /usr/local/bin/init.sh
 
 ENV QUEUE_WORKERS "{\"default\":1}"
+ENV QUEUE_DEFAULT_TIMEOUT 30
+ENV DEBUG false
+ENV PHP_PM_MAX_CHILDREN 60
+ENV PHP_PM_MAX_REQUESTS 500
 
 VOLUME /var/lib/tarantool
 

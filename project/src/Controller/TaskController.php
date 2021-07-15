@@ -20,6 +20,7 @@ class TaskController extends LayoutController
             'query_string',
             'body',
             'sleep',
+            'timeout',
         ]);
 
         $data['type'] = Task::TYPE_REGULAR;

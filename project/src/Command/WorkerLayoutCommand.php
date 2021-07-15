@@ -20,6 +20,8 @@ abstract class WorkerLayoutCommand extends PlainController
         /** @var QueueInterface $queue */
         $queue = $this->s($this->getQueue());
 
+        $debug = $this->getContainer()->getParam('queue/debug', false);
+
         while (true) {
             $task = null;
 
@@ -32,7 +34,9 @@ abstract class WorkerLayoutCommand extends PlainController
                     }
 
                     if ($task->getMax() - $task->getMin() > $task->getGap()) {
-                        echo sprintf("FRACTION: Dividing task: min - %s, max - %s, gap - %s", $task->getMin(), $task->getMax(), $task->getGap()) . PHP_EOL;
+                        if ($debug) {
+                            echo sprintf("FRACTION: Dividing task: min - %s, max - %s, gap - %s", $task->getMin(), $task->getMax(), $task->getGap()) . PHP_EOL;
+                        }
 
                         $offset = intval(($task->getMax() - $task->getMin()) / 4);
 
@@ -48,7 +52,9 @@ abstract class WorkerLayoutCommand extends PlainController
                                 $new_task->setMax($task->getMin() + $offset * ($i + 1) - 1);
                             }
 
-                            echo sprintf("FRACTION: New task: min - %s, max - %s, gap - %s", $new_task->getMin(), $new_task->getMax(), $new_task->getGap()) . PHP_EOL;
+                            if ($debug) {
+                                echo sprintf("FRACTION: New task: min - %s, max - %s, gap - %s", $new_task->getMin(), $new_task->getMax(), $new_task->getGap()) . PHP_EOL;
+                            }
 
                             $queue->save($new_task);
                         }
@@ -77,34 +83,29 @@ abstract class WorkerLayoutCommand extends PlainController
                         }
                     }
 
-                    echo sprintf("EXECUTE: %s %s", $task->getMethod(), $task->getUrl()) . PHP_EOL;
+                    if ($debug) {
+                        echo sprintf("EXECUTE: %s %s", $task->getMethod(), $task->getUrl()) . PHP_EOL;
 
-                    if ($task->getHeaders()) {
-                        echo sprintf("EXECUTE: %s", print_r($task->getHeaders(), true)) . PHP_EOL;
+                        if ($task->getHeaders()) {
+                            echo sprintf("EXECUTE: %s", print_r($task->getHeaders(), true)) . PHP_EOL;
+                        }
+
+                        if ($task->getJson()) {
+                            echo sprintf("EXECUTE: %s", print_r($task->getJson(), true)) . PHP_EOL;
+                        }
+
+                        if ($task->getQueryString()) {
+                            echo sprintf("EXECUTE: %s", print_r($task->getQueryString(), true)) . PHP_EOL;
+                        }
+
+                        if ($task->getBody()) {
+                            echo sprintf("EXECUTE: %s", $task->getBody()) . PHP_EOL;
+                        }
+
+                        echo PHP_EOL;
                     }
 
-                    if ($task->getJson()) {
-                        echo sprintf("EXECUTE: %s", print_r($task->getJson(), true)) . PHP_EOL;
-                    }
-
-                    if ($task->getQueryString()) {
-                        echo sprintf("EXECUTE: %s", print_r($task->getQueryString(), true)) . PHP_EOL;
-                    }
-
-                    if ($task->getBody()) {
-                        echo sprintf("EXECUTE: %s", $task->getBody()) . PHP_EOL;
-                    }
-
-                    echo PHP_EOL;
-
-                    $this->execute('queue', 'task', [
-                        $task->getUrl(),
-                        $task->getMethod(),
-                        $task->getHeaders(),
-                        $task->getJson(),
-                        $task->getQueryString(),
-                        $task->getBody(),
-                    ]);
+                    $this->execute('queue', 'task', [$task]);
                 } catch (\Throwable $e) {
                     throw $e;
                 }

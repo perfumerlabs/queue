@@ -65,6 +65,11 @@ class Task
     /**
      * @var int
      */
+    private $timeout;
+
+    /**
+     * @var int
+     */
     private $min = 0;
 
     /**
@@ -251,6 +256,22 @@ class Task
     public function setSleep($sleep)
     {
         $this->sleep = $sleep;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * @param int $timeout
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
     }
 
     /**

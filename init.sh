@@ -22,10 +22,13 @@ sed -i "s/log_errors_max_len = 1024/log_errors_max_len = 0/g" /etc/php/7.4/cli/p
 sed -i "s/user = www-data/user = queue/g" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/group = www-data/group = queue/g" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/pm = dynamic/pm = static/g" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/pm.max_children = 5/pm.max_children = 60/g" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/;pm.max_requests = 500/pm.max_requests = 500/g" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/pm.max_children = 5/pm.max_children = ${PHP_PM_MAX_CHILDREN}/g" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/;pm.max_requests = 500/pm.max_requests = ${PHP_PM_MAX_REQUESTS}/g" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/listen.owner = www-data/listen.owner = queue/g" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/listen.group = www-data/listen.group = queue/g" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/;catch_workers_output = yes/catch_workers_output = yes/g" /etc/php/7.4/fpm/pool.d/www.conf
+
+sed -i "s/'QUEUE_DEFAULT_TIMEOUT'/$QUEUE_DEFAULT_TIMEOUT/g" /opt/queue/src/Resource/config/resources_shared.php
+sed -i "s/'DEBUG'/$DEBUG/g" /opt/queue/src/Resource/config/resources_shared.php
 
 touch /node_status_inited

@@ -46,6 +46,7 @@ class TarantoolAdapter implements QueueInterface
             'query_string' => $task->getQueryString(),
             'body' => $task->getBody(),
             'sleep' => $task->getSleep(),
+            'timeout' => $task->getTimeout(),
         ];
 
         if ($task->getType() === Task::TYPE_FRACTION) {
@@ -83,6 +84,7 @@ class TarantoolAdapter implements QueueInterface
             $query_string = $data['query_string'] ?? [];
             $body = $data['body'] ?? null;
             $sleep = $data['sleep'] ?? 0;
+            $timeout = $data['timeout'] ?? 0;
             $min = $data['min'] ?? 0;
             $max = $data['max'] ?? 0;
             $gap = $data['gap'] ?? 0;
@@ -96,6 +98,7 @@ class TarantoolAdapter implements QueueInterface
             $task->setQueryString((array) $query_string);
             $task->setBody((string) $body);
             $task->setSleep((int) $sleep);
+            $task->setTimeout((int) $timeout);
             $task->setMin((int) $min);
             $task->setMax((int) $max);
             $task->setGap((int) $gap);

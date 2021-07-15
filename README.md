@@ -8,13 +8,17 @@ docker run \
 -p 80:80/tcp \
 -e "QUEUE_WORKERS={\"my_worker\":1}" \
 -v tarantool:/var/lib/tarantool \
--d perfumerlabs/queue:v1.3.0
+-d perfumerlabs/queue:v1.4.0
 ```
 
 Environment variables
 =====================
 
 - QUEUE_WORKERS - list of workers in json format (see below). Required.
+- QUEUE_DEFAULT_TIMEOUT - default timeout in seconds, when queue worker requests backend. Optional. Default value is 30.
+- DEBUG - if "true", print more debug information. Optional. Default value is "false".
+- PHP_PM_MAX_CHILDREN - number of FPM workers. Default value is 60.
+- PHP_PM_MAX_REQUESTS - number of FPM max requests. Default value is 500.
 
 Volumes
 =======
@@ -150,6 +154,7 @@ API Reference
 - query_string: object will be transformed to query string (for example, "param1=foo&param2=bar") and sent as body. If request method is GET or HEAD it will be appended to url. Optional.
 - body: Raw body that will be sent with the request. Optional.
 - sleep: Time in microseconds to sleep after execution of the task. Optional.
+- timeout: Time in seconds to change timeout, when queue worker requests backend. Optional. If not set, `QUEUE_DEFAULT_TIMEOUT` is applied.
 
 Use one of "delay" or "datetime". Use one of "json", "query_string" or "body".
 
@@ -245,6 +250,7 @@ Response example:
 Software
 ========
 
-1. Ubuntu 16.04 Xenial
-2. Tarantool 2.2
+1. Ubuntu 18.04 Bionic
+2. Tarantool 2.6
 3. PHP 7.4
+3. Nginx 1.20
